@@ -6,7 +6,7 @@ public class Start : MonoBehaviour
 {
     public void StartGame()
     {
-        SceneManager.LoadScene(2); // Load the main scene
+        SceneManager.LoadScene(1); // Load the main scene
     }
     public void QuitGame()
     {

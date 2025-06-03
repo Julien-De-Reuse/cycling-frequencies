@@ -7,7 +7,7 @@ using System.IO.Ports;
 
 public class StartController : MonoBehaviour
 {
-    SerialPort serial = new SerialPort("COM3", 9600); // Change COM port if needed
+    SerialPort serial;
 
     public Button startButton;
     public Button exitButton;
@@ -17,13 +17,10 @@ public class StartController : MonoBehaviour
 
     void Start()
     {
-        if (!serial.IsOpen)
-        {
-            serial.Open();
-            serial.ReadTimeout = 25;
-        }
+        serial = SerialManager.Instance.serial;
 
-        // Load your Start script (must be on same GameObject)
+
+        // Laad startscript (op zelfde GameObject)
         startScript = GetComponent<Start>();
 
         UpdateButtonStyles();
@@ -31,7 +28,7 @@ public class StartController : MonoBehaviour
 
     void Update()
     {
-        if (serial.IsOpen)
+        if (serial != null && serial.IsOpen)
         {
             try
             {
@@ -39,13 +36,13 @@ public class StartController : MonoBehaviour
 
                 if (input == "+")
                 {
-                    selectedIndex = 0; // Start
+                    selectedIndex = 0;
                     UpdateButtonStyles();
                     Debug.Log("Selected Start");
                 }
                 else if (input == "-")
                 {
-                    selectedIndex = 1; // Exit
+                    selectedIndex = 1;
                     UpdateButtonStyles();
                     Debug.Log("Selected Exit");
                 }
@@ -75,7 +72,6 @@ public class StartController : MonoBehaviour
         ColorBlock startColors = startButton.colors;
         ColorBlock exitColors = exitButton.colors;
 
-        // Highlight selected button
         if (selectedIndex == 0)
         {
             startColors.normalColor = Color.green;
@@ -93,6 +89,6 @@ public class StartController : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        if (serial.IsOpen) serial.Close();
+        // De poort wordt netjes gesloten door SerialManager → geen dubbele .Close() nodig hier.
     }
 }

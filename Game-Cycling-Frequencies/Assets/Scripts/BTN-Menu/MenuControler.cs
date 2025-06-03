@@ -5,17 +5,18 @@ using System.IO.Ports;
 
 public class MenuController : MonoBehaviour
 {
-    [Header("Serial Settings")]
-    public string portName = "COM3";
-    public int baudRate = 9600;
     private SerialPort serial;
 
+    [Header("Panels")]
+    public GameObject currentPanel;
+    public GameObject confirmPanel;
+    public GameObject nextPanel;
+
     [Header("Menu Buttons")]
-    public List<Button> menuButtons = new List<Button>(); // Assign 5 buttons in Inspector
+    public List<Button> menuButtons = new List<Button>();
     private int selectedIndex = 0;
 
-    [Header("Confirmation Popup")]
-    public GameObject confirmPanel;
+    [Header("Confirmation Buttons")]
     public Button yesButton;
     public Button noButton;
     private int confirmIndex = 0; // 0 = Yes, 1 = No
@@ -23,45 +24,39 @@ public class MenuController : MonoBehaviour
 
     void Start()
     {
-        serial = new SerialPort(portName, baudRate);
-        serial.ReadTimeout = 25;
-
-        if (!serial.IsOpen)
-        {
-            serial.Open();
-        }
-
+        serial = SerialManager.Instance.serial;
         UpdateButtonStyles();
     }
 
     void Update()
     {
-        if (!serial.IsOpen) return;
-
-        try
+        if (serial != null && serial.IsOpen)
         {
-            string input = serial.ReadLine().Trim();
+            try
+            {
+                string input = serial.ReadLine().Trim();
 
-            if (!isConfirming)
-            {
-                HandleMenuNavigation(input);
+                if (!isConfirming)
+                {
+                    HandleMenuNavigation(input);
+                }
+                else
+                {
+                    HandleConfirmationNavigation(input);
+                }
             }
-            else
-            {
-                HandleConfirmationNavigation(input);
-            }
+            catch (System.Exception) { }
         }
-        catch (System.Exception) { }
     }
 
     void HandleMenuNavigation(string input)
     {
-        if (input == "+")
+        if (input == "-")
         {
             selectedIndex = (selectedIndex - 1 + menuButtons.Count) % menuButtons.Count;
             UpdateButtonStyles();
         }
-        else if (input == "-")
+        else if (input == "+")
         {
             selectedIndex = (selectedIndex + 1) % menuButtons.Count;
             UpdateButtonStyles();
@@ -76,7 +71,7 @@ public class MenuController : MonoBehaviour
     {
         if (input == "+" || input == "-")
         {
-            confirmIndex = 1 - confirmIndex; // Toggle between 0 and 1
+            confirmIndex = 1 - confirmIndex;
             UpdateConfirmationButtonStyles();
         }
         else if (input == "C")
@@ -85,9 +80,13 @@ public class MenuController : MonoBehaviour
             {
                 ExecuteMenuOption();
             }
-
-            confirmPanel.SetActive(false);
-            isConfirming = false;
+            else
+            {
+                isConfirming = false;
+                confirmPanel.SetActive(false);
+                currentPanel.SetActive(true);
+                UpdateButtonStyles();
+            }
         }
     }
 
@@ -96,13 +95,14 @@ public class MenuController : MonoBehaviour
         for (int i = 0; i < menuButtons.Count; i++)
         {
             ColorBlock colors = menuButtons[i].colors;
-            colors.normalColor = (i == selectedIndex) ? Color.cyan : Color.white;
+            colors.normalColor = (i == selectedIndex) ? Color.green : Color.white;
             menuButtons[i].colors = colors;
         }
     }
 
     void ShowConfirmationPopup()
     {
+        Debug.Log("Showing confirmation popup for: " + menuButtons[selectedIndex].name);
         isConfirming = true;
         confirmIndex = 0;
         confirmPanel.SetActive(true);
@@ -131,24 +131,24 @@ public class MenuController : MonoBehaviour
 
     void ExecuteMenuOption()
     {
-        switch (selectedIndex)
+        if (selectedIndex >= 0 && selectedIndex < menuButtons.Count)
         {
-            case 0:
-                Debug.Log("Option 1 triggered"); break;
-            case 1:
-                Debug.Log("Option 2 triggered"); break;
-            case 2:
-                Debug.Log("Option 3 triggered"); break;
-            case 3:
-                Debug.Log("Option 4 triggered"); break;
-            case 4:
-                Debug.Log("Option 5 triggered"); break;
-        }
-    }
+            Debug.Log("Executing: " + menuButtons[selectedIndex].name);
 
-    void OnApplicationQuit()
-    {
-        if (serial != null && serial.IsOpen)
-            serial.Close();
+            confirmPanel.SetActive(false);
+            currentPanel.SetActive(false);
+
+            if (nextPanel != null)
+            {
+                nextPanel.SetActive(true);
+            }
+
+            isConfirming = false;
+            menuButtons[selectedIndex].onClick.Invoke();
+        }
+        else
+        {
+            Debug.LogWarning("Invalid selection index: " + selectedIndex);
+        }
     }
 }
