@@ -19,7 +19,8 @@ public string selectedMusicName; // Algemene muziekkeuze
 
         public string environment;
         public string difficulty;
-        public string gameTime;
+public int selectedSessionDuration; // Duur van de sessie in seconden
+
         public int idealLevel;
         public int[] suggestedLevels = new int[5];
     }
@@ -43,6 +44,7 @@ public string selectedMusicName; // Algemene muziekkeuze
 
         public string environment;
         public string speed;
+        public int selectedSessionDuration; // Duur van de sessie in seconden
     }
 
     public CruiseControlData cruiseControlData = new CruiseControlData();

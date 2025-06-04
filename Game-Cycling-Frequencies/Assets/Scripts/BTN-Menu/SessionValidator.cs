@@ -12,7 +12,7 @@ public class SessionValidator : MonoBehaviour
         var data = manager.spectrumRideData;
 
         // Controleer of muziek en sessieduur zijn ingevuld
-        if (string.IsNullOrEmpty(manager.selectedMusicName) || string.IsNullOrEmpty(data.gameTime))
+        if (string.IsNullOrEmpty(manager.selectedMusicName) || string.IsNullOrEmpty(data.selectedSessionDuration.ToString()))
         {
             Debug.LogWarning("⚠️ Vul eerst muziek én sessieduur in!");
             // Hier kun je eventueel nog UI feedback tonen
@@ -20,7 +20,7 @@ public class SessionValidator : MonoBehaviour
         }
 
         // Alles in orde, laad de scene
-        Debug.Log($"✅ Start sessie in scene '{sceneToLoad}' met muziek '{manager.selectedMusicName}' en tijd '{data.gameTime}'");
+        Debug.Log($"✅ Start sessie in scene '{sceneToLoad}' met muziek '{manager.selectedMusicName}' en tijd '{data.selectedSessionDuration.ToString()}'");
         SceneManager.LoadScene(sceneToLoad);
     }
 }
