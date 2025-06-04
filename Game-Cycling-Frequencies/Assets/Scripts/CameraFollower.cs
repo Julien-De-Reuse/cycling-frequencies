@@ -5,7 +5,6 @@ using TMPro;
 public class CameraFollower : MonoBehaviour
 {
     public Transform targetToFollow;
-    public SerialController serialController;
     public float heightOffset = 2f;
     public float speedMultiplier = 1f;
     public TextMeshProUGUI speedText;
@@ -22,21 +21,30 @@ public class CameraFollower : MonoBehaviour
 
     void Update()
     {
-        string message = serialController.ReadSerialMessage();
+        var serial = SerialManager.Instance.serial;
 
-        if (message != null && float.TryParse(message, out float speedValue))
+        if (serial != null && serial.IsOpen)
         {
-            currentSpeed = speedValue * speedMultiplier;
-            Debug.Log("Speed from Arduino: " + currentSpeed);
-
-            if (speedText != null)
-                speedText.text = "Speed: " + currentSpeed.ToString("F1") + " km/h";
-
-            if (!pedalSignalSent && currentSpeed > 1f)
+            try
             {
-                pedalSignalSent = true;
-                FindObjectOfType<SessionStartManager>().OnFirstPedal();
+                string message = serial.ReadLine().Trim();
+
+                if (!string.IsNullOrEmpty(message) && float.TryParse(message, out float speedValue))
+                {
+                    currentSpeed = speedValue * speedMultiplier;
+                    Debug.Log("Speed from Arduino: " + currentSpeed);
+
+                    if (speedText != null)
+                        speedText.text = "Speed: " + currentSpeed.ToString("F1") + " km/h";
+
+                    if (!pedalSignalSent && currentSpeed > 1f)
+                    {
+                        pedalSignalSent = true;
+                        FindObjectOfType<SessionStartManager>().OnFirstPedal();
+                    }
+                }
             }
+            catch (System.Exception) { }
         }
     }
 

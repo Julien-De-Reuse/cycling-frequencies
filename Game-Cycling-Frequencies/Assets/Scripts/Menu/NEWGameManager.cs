@@ -6,6 +6,7 @@ public class NEWGameManager : MonoBehaviour
 
     public enum ModType { None, SpectrumRide, Overdrive, CruiseControl }
     public ModType currentMod = ModType.None;
+public string selectedMusicName; // Algemene muziekkeuze
 
     // Gegevens voor SpectrumRide
     [System.Serializable]
@@ -15,7 +16,7 @@ public class NEWGameManager : MonoBehaviour
         public float weightRange;
         public float heightRange;
         public int sportDays;
-        public string music;
+
         public string environment;
         public string difficulty;
         public string gameTime;
@@ -29,7 +30,7 @@ public class NEWGameManager : MonoBehaviour
     [System.Serializable]
     public class OverdriveData
     {
-        public string music;
+
         public string environment;
     }
 
@@ -39,7 +40,7 @@ public class NEWGameManager : MonoBehaviour
     [System.Serializable]
     public class CruiseControlData
     {
-        public string music;
+
         public string environment;
         public string speed;
     }

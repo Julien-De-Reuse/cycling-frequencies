@@ -270,7 +270,7 @@ GameObject:
   - component: {fileID: 105301983}
   - component: {fileID: 105301982}
   m_Layer: 5
-  m_Name: CruiseControl
+  m_Name: CruiseControlButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1047,7 +1047,7 @@ GameObject:
   - component: {fileID: 499401077}
   - component: {fileID: 499401076}
   m_Layer: 5
-  m_Name: Overdrive
+  m_Name: OverdriveButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2084,7 +2084,7 @@ GameObject:
   - component: {fileID: 1127714455}
   - component: {fileID: 1127714454}
   m_Layer: 5
-  m_Name: SpectrumRide.
+  m_Name: SpectrumRideButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

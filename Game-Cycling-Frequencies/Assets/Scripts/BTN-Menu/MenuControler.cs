@@ -144,7 +144,26 @@ public class MenuController : MonoBehaviour
             }
 
             isConfirming = false;
-            menuButtons[selectedIndex].onClick.Invoke();
+            string buttonName = menuButtons[selectedIndex].name;
+
+menuButtons[selectedIndex].onClick.Invoke(); // laat bestaande logica werken
+
+// Controleer of dit de knop is die een scene moet starten
+if (buttonName == "yesBtn_time") // pas aan naar de echte naam in jouw Hierarchy!
+{
+    string sceneToLoad = NEWGameManager.Instance.spectrumRideData.environment;
+
+    if (!string.IsNullOrEmpty(sceneToLoad))
+    {
+        Debug.Log("Scene wordt geladen: " + sceneToLoad);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneToLoad);
+    }
+    else
+    {
+        Debug.LogWarning("Geen environment gekozen. Kan geen scene laden.");
+    }
+}
+
         }
         else
         {
