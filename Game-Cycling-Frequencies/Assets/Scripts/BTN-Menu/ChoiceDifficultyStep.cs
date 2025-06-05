@@ -33,7 +33,7 @@ public class ChoiceDifficultyStep : MonoBehaviour
         if (bmi >= 18.5f && bmi <= 25f)
             baseLevel += 1f;
 
-        if (ageRange == "51-60" || ageRange == "+60")
+        if (ageRange == "51-65" || ageRange == "+65")
             baseLevel -= 2f;
         else if (ageRange == "36-50")
             baseLevel -= 1f;
