@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System;
 
 [RequireComponent(typeof(Rigidbody))]
 public class CameraFollower : MonoBehaviour
@@ -29,20 +30,25 @@ public class CameraFollower : MonoBehaviour
             {
                 string message = serial.ReadLine().Trim();
 
-                if (!string.IsNullOrEmpty(message) && float.TryParse(message, out float speedValue))
-                {
-                    currentSpeed = speedValue * speedMultiplier;
-                    Debug.Log("Speed from Arduino: " + currentSpeed);
+if (!string.IsNullOrEmpty(message) && float.TryParse(message, out float speedValue))
+{
+    currentSpeed = speedValue * speedMultiplier;
+    Debug.Log("Speed from Arduino: " + currentSpeed);
 
-                    if (speedText != null)
-                        speedText.text = "Speed: " + currentSpeed.ToString("F1") + " km/h";
+    if (speedText != null)
+        speedText.text = "Speed: " + currentSpeed.ToString("F1") + " km/h";
 
-                    if (!pedalSignalSent && currentSpeed > 1f)
-                    {
-                        pedalSignalSent = true;
-                        FindObjectOfType<SessionStartManager>().OnFirstPedal();
-                    }
-                }
+    // Add speed sample
+    GameStatsManager.Instance.AddSpeedSample(currentSpeed);
+
+    if (!pedalSignalSent && currentSpeed > 1f)
+    {
+        pedalSignalSent = true;
+        FindObjectOfType<SessionStartManager>().OnFirstPedal();
+    }
+}
+
+                
             }
             catch (System.Exception) { }
         }
@@ -56,6 +62,13 @@ public class CameraFollower : MonoBehaviour
             rb.MovePosition(rb.position + movement);
         }
     }
+    public void DisableCameraFollow()
+{
+    cameraCanMove = false;
+    currentSpeed = 0f; // just to be safe
+    Debug.Log("📷 Camera movement DISABLED");
+}
+
 
     void LateUpdate()
     {

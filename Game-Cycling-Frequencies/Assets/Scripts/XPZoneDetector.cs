@@ -10,10 +10,12 @@ public class XPZoneDetector : MonoBehaviour
     void Update()
     {
         if (xpPerSecond > 0f)
-        {
-            xp += xpPerSecond * Time.deltaTime;
-            UpdateXPUI();
-        }
+{
+    xp += xpPerSecond * Time.deltaTime;
+    GameStatsManager.Instance.AddXP(xpPerSecond * Time.deltaTime);
+    UpdateXPUI();
+}
+
     }
 
     void UpdateXPUI()

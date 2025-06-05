@@ -7,7 +7,7 @@ using TMPro;
 public class Countdown : MonoBehaviour
 {
     [Tooltip("Aantal seconden dat de sessie duurt (wordt ingesteld door SessionStartManager)")]
-    public float sessionDuration = 60f;
+    public float sessionDuration = 3f;// for testing purposes, set to 3 seconds
 
     [Tooltip("UI Text element dat de resterende tijd toont")]
     public TMP_Text textBox;
@@ -20,7 +20,7 @@ public class Countdown : MonoBehaviour
         if (sessionDuration <= 0f)
         {
             Debug.LogWarning("⚠️ sessionDuration is ongeldig, fallback naar 60 seconden.");
-            sessionDuration = 60f;
+            sessionDuration = 3f;// for testing purposes, set to 3 seconds
         }
 
         remainingTime = sessionDuration;
@@ -37,20 +37,34 @@ public class Countdown : MonoBehaviour
         if (!isCounting) return;
 
         if (remainingTime > 0)
-        {
-            remainingTime -= Time.deltaTime;
-            if (textBox != null)
-                textBox.text = Mathf.Ceil(remainingTime).ToString();
-        }
+{
+    remainingTime -= Time.deltaTime;
+    GameStatsManager.Instance.UpdateSessionTime(Time.deltaTime);
+
+    if (textBox != null)
+        textBox.text = Mathf.Ceil(remainingTime).ToString();
+}
+
         else
         {
             if (textBox != null)
             {
                 textBox.text = "Game Over!";
                 textBox.color = Color.red;
+
             }
 
             isCounting = false;
+            // Call the GameOver script
+    GameOver gameOverScript = FindObjectOfType<GameOver>();
+    if (gameOverScript != null)
+    {
+        gameOverScript.OnGameOver();
+    }
+    else
+    {
+        Debug.LogWarning("GameOver script not found in the scene.");
+    }
             StartCoroutine(HideAfterDelay(1f));
         }
     }

@@ -62,7 +62,7 @@ public class SessionStartManager : MonoBehaviour
         // Visuele pre-start countdown
         countdownText.gameObject.SetActive(true);
 
-        for (int i = 5; i > 0; i--)
+        for (int i = 3; i > 0; i--)
         {
             countdownText.text = i.ToString();
             Debug.Log("⏳ Countdown: " + i);

@@ -69,24 +69,20 @@ public class MenuController : MonoBehaviour
 
     void HandleConfirmationNavigation(string input)
     {
-        if (input == "+" || input == "-")
+        if (input == "+")
         {
-            confirmIndex = 1 - confirmIndex;
+            confirmIndex = 0; // Yes
             UpdateConfirmationButtonStyles();
+            ExecuteMenuOption();
         }
-        else if (input == "C")
+        else if (input == "-")
         {
-            if (confirmIndex == 0)
-            {
-                ExecuteMenuOption();
-            }
-            else
-            {
-                isConfirming = false;
-                confirmPanel.SetActive(false);
-                currentPanel.SetActive(true);
-                UpdateButtonStyles();
-            }
+            confirmIndex = 1; // No
+            UpdateConfirmationButtonStyles();
+            isConfirming = false;
+            confirmPanel.SetActive(false);
+            currentPanel.SetActive(true);
+            UpdateButtonStyles();
         }
     }
 
@@ -130,44 +126,85 @@ public class MenuController : MonoBehaviour
     }
 
     void ExecuteMenuOption()
-    {
-        if (selectedIndex >= 0 && selectedIndex < menuButtons.Count)
-        {
-            Debug.Log("Executing: " + menuButtons[selectedIndex].name);
-
-            confirmPanel.SetActive(false);
-            currentPanel.SetActive(false);
-
-            if (nextPanel != null)
-            {
-                nextPanel.SetActive(true);
-            }
-
-            isConfirming = false;
-            string buttonName = menuButtons[selectedIndex].name;
-
-menuButtons[selectedIndex].onClick.Invoke(); // laat bestaande logica werken
-
-// Controleer of dit de knop is die een scene moet starten
-if (buttonName == "yesBtn_time") // pas aan naar de echte naam in jouw Hierarchy!
 {
-    string sceneToLoad = NEWGameManager.Instance.spectrumRideData.environment;
+    if (selectedIndex >= 0 && selectedIndex < menuButtons.Count)
+    {
+        string buttonName = menuButtons[selectedIndex].name;
+        Debug.Log("🧭 Bevestigd: " + buttonName);
+        Debug.Log("📍 currentPanel: " + currentPanel.name);
+
+        isConfirming = false;
+
+        // Koppel de juiste actie aan de knop
+        menuButtons[selectedIndex].onClick.Invoke();
+
+// Als StepToScene net werd geactiveerd → laadt meteen scene
+if (currentPanel.name == "StepToScene")
+{
+    Debug.Log("🚀 StepToScene geactiveerd – scène wordt automatisch geladen");
+    TryLoadSelectedScene();
+}
+
+
+        // 🔁 Panel wissel
+        confirmPanel.SetActive(false);
+        currentPanel.SetActive(false);
+
+        if (nextPanel != null)
+        {
+            Debug.Log("➡️ Ga naar volgend panel: " + nextPanel.name);
+            nextPanel.SetActive(true);
+
+            // 👇 BELANGRIJK: zet currentPanel om mee te geven aan volgende stap
+            currentPanel = nextPanel;
+        }
+    }
+    else
+    {
+        Debug.LogWarning("Invalid selection index: " + selectedIndex);
+    }
+}
+void TryLoadSelectedScene()
+{
+    string sceneToLoad = "";
+    bool sessionDurationValid = false;
+
+    switch (NEWGameManager.Instance.currentMod)
+    {
+        case NEWGameManager.ModType.SpectrumRide:
+            sceneToLoad = NEWGameManager.Instance.spectrumRideData.environment;
+            sessionDurationValid = NEWGameManager.Instance.spectrumRideData.selectedSessionDuration > 0;
+            break;
+
+        case NEWGameManager.ModType.CruiseControl:
+            sceneToLoad = NEWGameManager.Instance.cruiseControlData.environment;
+            sessionDurationValid = NEWGameManager.Instance.cruiseControlData.selectedSessionDuration > 0;
+            break;
+
+        case NEWGameManager.ModType.Overdrive:
+            sceneToLoad = NEWGameManager.Instance.overdriveData.environment;
+            sessionDurationValid = true;
+            break;
+    }
+
+    if (!sessionDurationValid)
+    {
+        Debug.LogWarning("⚠️ Geen geldige sessieduur gekozen – scene wordt niet geladen.");
+        return;
+    }
 
     if (!string.IsNullOrEmpty(sceneToLoad))
     {
-        Debug.Log("Scene wordt geladen: " + sceneToLoad);
+        Debug.Log("✅ Scene wordt geladen: " + sceneToLoad);
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneToLoad);
     }
     else
     {
-        Debug.LogWarning("Geen environment gekozen. Kan geen scene laden.");
+        Debug.LogWarning("⚠️ Geen environment gekozen – scene kan niet geladen worden.");
     }
 }
 
-        }
-        else
-        {
-            Debug.LogWarning("Invalid selection index: " + selectedIndex);
-        }
-    }
 }
+
+
+

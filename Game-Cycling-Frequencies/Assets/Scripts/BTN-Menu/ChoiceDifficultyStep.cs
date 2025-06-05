@@ -43,19 +43,13 @@ public class ChoiceDifficultyStep : MonoBehaviour
     }
 
     public void SelectLevel(int level)
-    {
-        NEWGameManager.Instance.spectrumRideData.idealLevel = level;
+{
+    NEWGameManager.Instance.spectrumRideData.idealLevel = level;
 
-        string sceneToLoad = NEWGameManager.Instance.spectrumRideData.environment;
+    Debug.Log("📌 Moeilijkheid geselecteerd: " + level);
 
-        if (!string.IsNullOrEmpty(sceneToLoad))
-        {
-            Debug.Log("Level gekozen: " + level + " → Laden van scene: " + sceneToLoad);
-            SceneManager.LoadScene(sceneToLoad);
-        }
-        else
-        {
-            Debug.LogError("Geen geldige scene geselecteerd!");
-        }
-    }
+    // De scene mag pas geladen worden in MenuController → StepToScene
+    // SceneManager.LoadScene(...) wordt dus NIET hier uitgevoerd
+}
+
 }
