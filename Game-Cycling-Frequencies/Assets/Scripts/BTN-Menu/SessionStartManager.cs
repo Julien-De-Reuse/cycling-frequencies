@@ -146,4 +146,6 @@ public class SessionStartManager : MonoBehaviour
             countdown.StartCountdown();
         }
     }
+
+    public bool SessionStarted => hasStarted;
 }

@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SelectMod : MonoBehaviour{
+public class SelectMod : MonoBehaviour
+{
     public void SelectSpectrumRide()
     {
         NEWGameManager.Instance.SetCurrentMod(NEWGameManager.ModType.SpectrumRide);
@@ -18,5 +19,10 @@ public class SelectMod : MonoBehaviour{
     {
         NEWGameManager.Instance.SetCurrentMod(NEWGameManager.ModType.CruiseControl);
         SceneManager.LoadScene("MenuCruiseControlScene");
+    }
+        public void SelectPiano()
+    {
+        NEWGameManager.Instance.SetCurrentMod(NEWGameManager.ModType.Piano);
+        SceneManager.LoadScene("PianoCity");
     }
 }

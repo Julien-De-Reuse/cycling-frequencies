@@ -151,6 +151,9 @@ public class ModSelectionController : MonoBehaviour
             case "CruiseControlButton":
                 NEWGameManager.Instance.SetCurrentMod(NEWGameManager.ModType.CruiseControl);
                 break;
+                        case "pianoMod":
+                NEWGameManager.Instance.SetCurrentMod(NEWGameManager.ModType.Piano);
+                break;
         }
 
         SceneManager.LoadScene(modMenuScenes[selectedIndex]);

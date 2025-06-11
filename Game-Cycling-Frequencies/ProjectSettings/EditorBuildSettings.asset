@@ -56,6 +56,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DEADVersion.unity
     guid: 45ebdae0cb0f10f4fbc6f2f5ba90634c
+  - enabled: 1
+    path: Assets/Scenes/Environments/PianoCity.unity
+    guid: 5ec887da11c716549a139bd6e8181926
+  - enabled: 1
+    path: Assets/Scenes/Environments/SRSceneToCity.unity
+    guid: 01f0ee7695b17884c99ccc4189498258
+  - enabled: 1
+    path: Assets/Scenes/Environments/SRSceneToNature.unity
+    guid: c365a290712525146b8581ef403baa8e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

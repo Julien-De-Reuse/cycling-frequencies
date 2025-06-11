@@ -67,24 +67,48 @@ public class MenuController : MonoBehaviour
         }
     }
 
-    void HandleConfirmationNavigation(string input)
+//method to handle confirmation navigation with + or - to select, C to confirm
+     void HandleConfirmationNavigation(string input)
     {
-        if (input == "+")
+        if (input == "+" || input == "-")
         {
-            confirmIndex = 0; // Yes
+            confirmIndex = 1 - confirmIndex;
             UpdateConfirmationButtonStyles();
-            ExecuteMenuOption();
         }
-        else if (input == "-")
+        else if (input == "C")
         {
-            confirmIndex = 1; // No
-            UpdateConfirmationButtonStyles();
-            isConfirming = false;
-            confirmPanel.SetActive(false);
-            currentPanel.SetActive(true);
-            UpdateButtonStyles();
+            if (confirmIndex == 0)
+            {
+                ExecuteMenuOption();
+            }
+            else
+            {
+                isConfirming = false;
+                confirmPanel.SetActive(false);
+                currentPanel.SetActive(true);
+                UpdateButtonStyles();
+            }
         }
     }
+//method to handle confirmation navigation with + or - (yes/no) inputs
+    /*     void HandleConfirmationNavigation(string input)
+        {
+            if (input == "+")
+            {
+                confirmIndex = 0; // Yes
+                UpdateConfirmationButtonStyles();
+                ExecuteMenuOption();
+            }
+            else if (input == "-")
+            {
+                confirmIndex = 1; // No
+                UpdateConfirmationButtonStyles();
+                isConfirming = false;
+                confirmPanel.SetActive(false);
+                currentPanel.SetActive(true);
+                UpdateButtonStyles();
+            }
+        } */
 
     void UpdateButtonStyles()
     {

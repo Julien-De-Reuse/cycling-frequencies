@@ -14,6 +14,7 @@ public class CameraFollower : MonoBehaviour
     private float currentSpeed = 0f;
     private bool pedalSignalSent = false;
     private bool cameraCanMove = false;
+    public static float LatestSpeed { get; private set; }
 
     void Start()
     {
@@ -30,25 +31,24 @@ public class CameraFollower : MonoBehaviour
             {
                 string message = serial.ReadLine().Trim();
 
-if (!string.IsNullOrEmpty(message) && float.TryParse(message, out float speedValue))
-{
-    currentSpeed = speedValue * speedMultiplier;
-    Debug.Log("Speed from Arduino: " + currentSpeed);
+                if (!string.IsNullOrEmpty(message) && float.TryParse(message, out float speedValue))
+                {
+                    currentSpeed = speedValue * speedMultiplier;
+                    LatestSpeed = currentSpeed;
+                    Debug.Log("Speed from Arduino: " + currentSpeed);
 
-    if (speedText != null)
-        speedText.text = "Speed: " + currentSpeed.ToString("F1") + " km/h";
+                    if (speedText != null)
+                        speedText.text = "Speed: " + currentSpeed.ToString("F1") + " km/h";
 
-    // Add speed sample
-    GameStatsManager.Instance.AddSpeedSample(currentSpeed);
+                    // Add speed sample
+                    GameStatsManager.Instance.AddSpeedSample(currentSpeed);
 
-    if (!pedalSignalSent && currentSpeed > 1f)
-    {
-        pedalSignalSent = true;
-        FindObjectOfType<SessionStartManager>().OnFirstPedal();
-    }
-}
-
-                
+                    if (!pedalSignalSent && currentSpeed > 1f)
+                    {
+                        pedalSignalSent = true;
+                        FindObjectOfType<SessionStartManager>().OnFirstPedal();
+                    }
+                }
             }
             catch (System.Exception) { }
         }

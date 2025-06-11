@@ -4,7 +4,7 @@ public class NEWGameManager : MonoBehaviour
 {
     public static NEWGameManager Instance;
 
-    public enum ModType { None, SpectrumRide, Overdrive, CruiseControl }
+    public enum ModType { None, SpectrumRide, Overdrive, CruiseControl, Piano }
     public ModType currentMod = ModType.None;
 public string selectedMusicName; // Algemene muziekkeuze
 
