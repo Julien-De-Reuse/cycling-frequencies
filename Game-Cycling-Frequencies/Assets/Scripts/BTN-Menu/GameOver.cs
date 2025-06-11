@@ -77,12 +77,11 @@ public class GameOver : MonoBehaviour
             var stats = GameStatsManager.Instance;
 
             resultText.text =
-                "<b>Game Over!</b>\n" +
-                $"⏱ Time: {stats.totalSessionTime:F1} sec\n" +
-                $"🚴 Avg Speed: {stats.GetAverageSpeed():F2} km/h\n" +
-                $"🏁 Max Speed: {stats.GetMaxSpeed():F2} km/h\n" +
-                $"⭐ Total XP: {stats.totalXP:F1}\n" +
-                $"⚡ XP / sec: {stats.GetXPPerSecond():F2}";
+                "<b>Time:</b>       "      + $"{stats.totalSessionTime,8:F1} sec\n" +
+                "<b>Avg Speed:</b>  "      + $"{stats.GetAverageSpeed(),8:F2} km/h\n" +
+                "<b>Max Speed:</b>  "      + $"{stats.GetMaxSpeed(),8:F2} km/h\n" +
+                "<b>Total XP:</b>   "      + $"{stats.totalXP,8:F1}\n" +
+                "<b>XP/sec:</b>     "      + $"{stats.GetXPPerSecond(),8:F2}";
         }
     }
 
