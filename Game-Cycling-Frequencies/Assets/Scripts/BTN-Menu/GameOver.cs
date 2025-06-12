@@ -22,8 +22,23 @@ public class GameOver : MonoBehaviour
     [Tooltip("Script controlling car movement")]
     public MonoBehaviour carControllerScript;
 
+    public TMP_Text statsLabelsText;
+    public TMP_Text statsValuesText;
+
+    private bool gameOverTriggered = false;
+
     public void OnGameOver()
+    
     {
+        Debug.Log("🟢 Entered GameOver.OnGameOver()");
+
+        if (gameOverTriggered)
+        {
+            Debug.Log("⚠️ GameOver already triggered, skipping.");
+            return;
+        }
+
+        gameOverTriggered = true;
         Debug.Log("✅ Game Over triggered");
 
         // Stop the music
@@ -32,10 +47,6 @@ public class GameOver : MonoBehaviour
             sessionStartManager.music.Stop();
             Debug.Log("🛑 Music stopped via SessionStartManager");
         }
-        else
-        {
-            Debug.LogWarning("❌ SessionStartManager or music reference missing in GameOver.cs");
-        }
 
         // Disable camera movement
         CameraFollower cam = FindObjectOfType<CameraFollower>();
@@ -43,10 +54,6 @@ public class GameOver : MonoBehaviour
         {
             cam.DisableCameraFollow();
             Debug.Log("📷 Camera movement disabled via GameOver");
-        }
-        else
-        {
-            Debug.LogWarning("❌ CameraFollower not found");
         }
 
         // Stop the car movement
@@ -66,39 +73,44 @@ public class GameOver : MonoBehaviour
             resultsPanel.SetActive(true);
             Debug.Log("📦 Results panel shown.");
         }
-        else
-        {
-            Debug.LogWarning("❌ ResultsPanel is not assigned in the inspector.");
-        }
 
         // Show final session stats
-        if (resultText != null)
+        if (resultText != null && statsValuesText != null)
         {
             var stats = GameStatsManager.Instance;
 
             resultText.text =
-                "<b>Time:</b>       "      + $"{stats.totalSessionTime,8:F1} sec\n" +
-                "<b>Avg Speed:</b>  "      + $"{stats.GetAverageSpeed(),8:F2} km/h\n" +
-                "<b>Max Speed:</b>  "      + $"{stats.GetMaxSpeed(),8:F2} km/h\n" +
-                "<b>Total XP:</b>   "      + $"{stats.totalXP,8:F1}\n" +
-                "<b>XP/sec:</b>     "      + $"{stats.GetXPPerSecond(),8:F2}";
+                "<b>Time:</b>\n" +
+                "<b>Avg Speed:</b>\n" +
+                "<b>Max Speed:</b>\n" +
+                "<b>Total XP:</b>\n" +
+                "<b>XP/sec:</b>";
+
+            float xpPerSecond = stats.totalSessionTime > 0 ? stats.GetXPPerSecond() : 0f;
+
+            statsValuesText.text =
+                $"{stats.totalSessionTime:F1} sec\n" +
+                $"{stats.GetAverageSpeed():F2} km/h\n" +
+                $"{stats.GetMaxSpeed():F2} km/h\n" +
+                $"{stats.totalXP:F1} XP\n" +
+                $"{xpPerSecond:F2}";
         }
     }
 
-    public void RestartGame()//restart current session
+    public void RestartGame()
     {
         Time.timeScale = 1f;
         GameStatsManager.Instance.ResetStats();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void GoToMenu()//go back to main menu
+    public void GoToMenu()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("StartScene");
     }
 
-    public void ExitGame()//exit the game
+    public void ExitGame()
     {
         Debug.Log("🚪 Exiting game...");
         Application.Quit();

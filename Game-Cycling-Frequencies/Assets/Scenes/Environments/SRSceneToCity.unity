@@ -1107,6 +1107,7 @@ GameObject:
   - component: {fileID: 330585549}
   - component: {fileID: 330585552}
   - component: {fileID: 330585553}
+  - component: {fileID: 330585554}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1296,6 +1297,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lives: 3
   lifeText: {fileID: 572844856}
+  bounceDistance: -5
+  bounceDuration: 0.5
+  gameOverManager: {fileID: 0}
 --- !u!54 &330585553
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1323,6 +1327,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 118
   m_CollisionDetection: 0
+--- !u!114 &330585554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45099d624c1e6c14e9514f4e5ea1ed9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spoutName: Spout Sender
+  _keepAlpha: 0
+  _captureMethod: 1
+  _sourceCamera: {fileID: 330585545}
+  _sourceTexture: {fileID: 0}
+  _resources: {fileID: 11400000, guid: f449ebbe2051c2e4d993eaa773a410de, type: 2}
 --- !u!1 &335947907
 GameObject:
   m_ObjectHideFlags: 0
@@ -2877,9 +2899,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 225c106487280d843b023c3ea407812c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sessionActive: 0
   totalSessionTime: 0
   totalXP: 0
-  speedSamples: []
 --- !u!4 &657809009
 Transform:
   m_ObjectHideFlags: 0
@@ -3235,7 +3257,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.432
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -3250,9 +3272,9 @@ Canvas:
   m_GameObject: {fileID: 795788653}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 330585545}
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -5606,6 +5628,7 @@ MonoBehaviour:
   countdown: {fileID: 1704319019}
   car: {fileID: 1721010805}
   music: {fileID: 2105693499}
+  sessionActive: 0
 --- !u!1 &1777461228
 GameObject:
   m_ObjectHideFlags: 0
@@ -6163,6 +6186,8 @@ MonoBehaviour:
   sessionStartManager: {fileID: 1755469870}
   car: {fileID: 1721010804}
   carControllerScript: {fileID: 1721010805}
+  statsLabelsText: {fileID: 0}
+  statsValuesText: {fileID: 0}
 --- !u!114 &1979999644
 MonoBehaviour:
   m_ObjectHideFlags: 0

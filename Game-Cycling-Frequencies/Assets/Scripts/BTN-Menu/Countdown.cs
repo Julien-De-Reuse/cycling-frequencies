@@ -1,13 +1,11 @@
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
+using System.Collections;
 
 public class Countdown : MonoBehaviour
 {
     [Tooltip("Aantal seconden dat de sessie duurt (wordt ingesteld door SessionStartManager)")]
-    public float sessionDuration = 3f;// for testing purposes, set to 3 seconds
+    public float sessionDuration = 3f;
 
     [Tooltip("UI Text element dat de resterende tijd toont")]
     public TMP_Text textBox;
@@ -20,7 +18,7 @@ public class Countdown : MonoBehaviour
         if (sessionDuration <= 0f)
         {
             Debug.LogWarning("⚠️ sessionDuration is ongeldig, fallback naar 60 seconden.");
-            sessionDuration = 3f;// for testing purposes, set to 3 seconds
+            sessionDuration = 3f;
         }
 
         remainingTime = sessionDuration;
@@ -37,34 +35,33 @@ public class Countdown : MonoBehaviour
         if (!isCounting) return;
 
         if (remainingTime > 0)
-{
-    remainingTime -= Time.deltaTime;
-    GameStatsManager.Instance.UpdateSessionTime(Time.deltaTime);
+        {
+            remainingTime -= Time.deltaTime;
+            GameStatsManager.Instance.UpdateSessionTime(Time.deltaTime);
 
-    if (textBox != null)
-        textBox.text = Mathf.Ceil(remainingTime).ToString();
-}
-
+            if (textBox != null)
+                textBox.text = Mathf.Ceil(remainingTime).ToString();
+        }
         else
         {
             if (textBox != null)
             {
                 textBox.text = "Game Over!";
                 textBox.color = Color.red;
-
             }
 
             isCounting = false;
-            // Call the GameOver script
-    GameOver gameOverScript = FindObjectOfType<GameOver>();
-    if (gameOverScript != null)
-    {
-        gameOverScript.OnGameOver();
-    }
-    else
-    {
-        Debug.LogWarning("GameOver script not found in the scene.");
-    }
+
+            GameOver gameOverScript = FindObjectOfType<GameOver>();
+            if (gameOverScript != null)
+            {
+                gameOverScript.OnGameOver();
+            }
+            else
+            {
+                Debug.LogWarning("GameOver script not found in the scene.");
+            }
+
             StartCoroutine(HideAfterDelay(1f));
         }
     }

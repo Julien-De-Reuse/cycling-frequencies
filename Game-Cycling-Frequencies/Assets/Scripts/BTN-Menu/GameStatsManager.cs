@@ -4,37 +4,48 @@ using UnityEngine;
 public class GameStatsManager : MonoBehaviour
 {
     public static GameStatsManager Instance;
-
+    public bool sessionActive = false;
     public float totalSessionTime = 0f;
     public float totalXP = 0f;
-    public List<float> speedSamples = new List<float>();
+
+    private List<float> speedSamples = new List<float>();
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // Optional
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
+    }
+
+    private void Update()
+    {
+        if (!sessionActive) return; // <--- THIS IS IMPORTANT
+
+        totalSessionTime += Time.deltaTime;
+        // XP logic here
     }
 
     public void AddSpeedSample(float speed)
     {
         speedSamples.Add(speed);
     }
-
-    public void AddXP(float xp)
+public void AddXP(float xp)
+{
+    if (!sessionActive)
     {
-        totalXP += xp;
+        Debug.LogWarning("⚠️ XP added while session NOT active! Ignoring. Value: " + xp);
+        return;
     }
+
+    totalXP += xp;
+    Debug.Log("✅ XP added: " + xp + " | Total: " + totalXP);
+}
+
 
     public void UpdateSessionTime(float deltaTime)
     {
-        totalSessionTime += deltaTime;
+        if (sessionActive)
+        {
+            totalSessionTime += deltaTime;
+        }
     }
 
     public float GetAverageSpeed()
@@ -67,6 +78,20 @@ public class GameStatsManager : MonoBehaviour
         totalSessionTime = 0f;
         totalXP = 0f;
         speedSamples.Clear();
+        sessionActive = false;
+    }
+
+    public void StartSessionStats()
+    {
+        totalSessionTime = 0f;
+        totalXP = 0f;
+        // Reset other stats as needed
+        sessionActive = true;
+    }
+
+    public void StopSessionStats()
+    {
+        sessionActive = false;
     }
 }
 // This script manages game statistics such as total session time, total XP, and speed samples.

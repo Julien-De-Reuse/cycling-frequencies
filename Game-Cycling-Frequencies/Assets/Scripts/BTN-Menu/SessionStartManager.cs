@@ -16,6 +16,7 @@ public class SessionStartManager : MonoBehaviour
     public AudioSource music;
 
     private bool hasStarted = false;
+    public bool sessionActive = false;
 
     void Start()
     {
@@ -145,7 +146,16 @@ public class SessionStartManager : MonoBehaviour
             countdown.sessionDuration = duration;
             countdown.StartCountdown();
         }
+
+        GameStatsManager.Instance.StartSessionStats();
     }
 
     public bool SessionStarted => hasStarted;
+
+    void Update()
+    {
+        if (!sessionActive) return;
+
+        // Only update stats/timer/XP here!
+    }
 }

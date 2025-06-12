@@ -7,16 +7,19 @@ public class XPZoneDetector : MonoBehaviour
     private float xp = 0f;
         public TextMeshProUGUI xpText; // Reference to UI text element
 
-    void Update()
-    {
-        if (xpPerSecond > 0f)
+void Update()
 {
-    xp += xpPerSecond * Time.deltaTime;
-    GameStatsManager.Instance.AddXP(xpPerSecond * Time.deltaTime);
-    UpdateXPUI();
+    if (!GameStatsManager.Instance.sessionActive) return;
+
+    if (xpPerSecond > 0f)
+    {
+        float deltaXP = xpPerSecond * Time.deltaTime;
+        xp += deltaXP;
+        GameStatsManager.Instance.AddXP(deltaXP);
+        UpdateXPUI();
+    }
 }
 
-    }
 
     void UpdateXPUI()
     {
