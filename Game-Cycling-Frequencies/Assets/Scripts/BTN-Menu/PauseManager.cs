@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO.Ports;
-using UnityEngine.InputSystem; // <-- toevoegen
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
@@ -24,9 +24,11 @@ public class PauseManager : MonoBehaviour
 
     private float currentSpeed = 0f;
     private float speedZeroTimer = 0.05f;
-    private float pauseThreshold = 2f; // seconds speed must remain 0 to trigger pause
+    private float pauseThreshold = 2f;
     private float sessionStartTimer = 0f;
-    private float pauseEnableDelay = 5f; // seconden na start sessie voordat pauze mogelijk is
+    private float pauseEnableDelay = 5f;
+
+    public GameOver gameOverManager;
 
     void Start()
     {
@@ -34,75 +36,83 @@ public class PauseManager : MonoBehaviour
     }
 
     void Update()
+{
+    // Block all logic if session hasn't started or game is over
+    if (sessionStartManager == null || !sessionStartManager.SessionStarted || gameOverManager == null || gameOverManager.IsGameOver)
+        return;
+
+    // Time since session start
+    sessionStartTimer += Time.unscaledDeltaTime;
+
+    if (sessionStartTimer < pauseEnableDelay)
+        return;
+
+    // Pause with ESC key
+    if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
     {
-        // Pauzeer alleen als de sessie gestart is
-        if (sessionStartManager == null || !sessionStartManager.SessionStarted)
-            return;
+        TogglePause();
+        Debug.Log("⏸ Game paused (via ESC)");
+    }
 
-        // Tel tijd sinds sessiestart op
-        sessionStartTimer += Time.unscaledDeltaTime;
+    // Read speed
+    currentSpeed = CameraFollower.LatestSpeed;
 
-        // Pauze mag pas na de delay
-        if (sessionStartTimer < pauseEnableDelay)
-            return;
+    // ✅ BLOCK PAUSE if game is over — was missing here before!
+    if (!isPaused && currentSpeed <= 0.01f)
+    {
+        speedZeroTimer += Time.unscaledDeltaTime;
 
-        // Pause with ESC key (nieuw Input System)
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (speedZeroTimer >= pauseThreshold)
         {
-            TogglePause();
-            Debug.Log("⏸ Game paused");
-        }
-
-        // Gebruik de speed van CameraFollower
-        currentSpeed = CameraFollower.LatestSpeed;
-
-        // If speed is 0.0 for over 2 seconds, pause
-        if (currentSpeed <= 0.01f)
-        {
-            speedZeroTimer += Time.unscaledDeltaTime;
-
-            if (speedZeroTimer >= pauseThreshold && !isPaused)
+            if (gameOverManager != null && gameOverManager.IsGameOver)
+            {
+                Debug.Log("❌ Skip speed-pause: game is over");
+            }
+            else
             {
                 TogglePause();
-                Debug.Log("⏸ Game paused due to speed being 0 for over " + pauseThreshold + " seconds");
+                Debug.Log($"⏸ Game paused due to speed = 0 for {pauseThreshold} seconds");
             }
-        }
-        else
-        {
-            speedZeroTimer = 0f;
-        }
-
-        // Navigatie via serial input als panel actief is
-        if (pausePanel != null && pausePanel.activeSelf && serial != null && serial.IsOpen)
-        {
-            try
-            {
-                string input = serial.ReadLine().Trim();
-
-                if (input == "+")
-                {
-                    pauseSelectedIndex = (pauseSelectedIndex + 1) % pauseButtons.Count;
-                    UpdatePauseButtonStyles();
-                }
-                else if (input == "-")
-                {
-                    pauseSelectedIndex = (pauseSelectedIndex - 1 + pauseButtons.Count) % pauseButtons.Count;
-                    UpdatePauseButtonStyles();
-                }
-                else if (input == "C")
-                {
-                    // Voer de geselecteerde actie uit
-                    switch (pauseSelectedIndex)
-                    {
-                        case 0: ResumeGame(); break;
-                        case 1: RestartGame(); break;
-                        case 2: GoToMenu(); break;
-                    }
-                }
-            }
-            catch (System.Exception) { }
         }
     }
+    else
+    {
+        speedZeroTimer = 0f;
+    }
+
+    // Handle serial input if pause panel is active
+    if (pausePanel != null && pausePanel.activeSelf && serial != null && serial.IsOpen)
+    {
+        try
+        {
+            string input = serial.ReadLine().Trim();
+
+            if (gameOverManager != null && gameOverManager.IsGameOver)
+                return;
+
+            if (input == "+")
+            {
+                pauseSelectedIndex = (pauseSelectedIndex + 1) % pauseButtons.Count;
+                UpdatePauseButtonStyles();
+            }
+            else if (input == "-")
+            {
+                pauseSelectedIndex = (pauseSelectedIndex - 1 + pauseButtons.Count) % pauseButtons.Count;
+                UpdatePauseButtonStyles();
+            }
+            else if (input == "C")
+            {
+                switch (pauseSelectedIndex)
+                {
+                    case 0: ResumeGame(); break;
+                    case 1: RestartGame(); break;
+                    case 2: GoToMenu(); break;
+                }
+            }
+        }
+        catch (System.Exception) { }
+    }
+}
 
     void UpdatePauseButtonStyles()
     {
@@ -110,22 +120,30 @@ public class PauseManager : MonoBehaviour
         {
             var btn = pauseButtons[i];
             var colors = btn.colors;
+
             if (i == pauseSelectedIndex)
             {
                 colors.normalColor = Color.green;
-                btn.image.color = Color.green; // Force image color
+                btn.image.color = Color.green;
             }
             else
             {
                 colors.normalColor = Color.white;
                 btn.image.color = Color.white;
             }
+
             btn.colors = colors;
         }
     }
 
     public void TogglePause()
     {
+        if (gameOverManager != null && gameOverManager.IsGameOver)
+        {
+            Debug.Log("❌ Cannot pause — game is over");
+            return;
+        }
+
         if (isPaused)
             ResumeGame();
         else
@@ -134,6 +152,12 @@ public class PauseManager : MonoBehaviour
 
     public void PauseGame()
     {
+        if (gameOverManager != null && gameOverManager.IsGameOver)
+        {
+            Debug.Log("❌ Cannot pause — game is over");
+            return;
+        }
+
         Time.timeScale = 0f;
         isPaused = true;
 
@@ -154,7 +178,7 @@ public class PauseManager : MonoBehaviour
         {
             Rigidbody rb = car.GetComponent<Rigidbody>();
             if (rb != null)
-                rb.linearVelocity = Vector3.zero;
+                rb.linearVelocity = Vector3.zero; // corrected from linearVelocity
         }
 
         Debug.Log("⏸ Game paused");
@@ -179,7 +203,7 @@ public class PauseManager : MonoBehaviour
             cam.EnableCameraFollow();
 
         speedZeroTimer = 0f;
-        sessionStartTimer = 0f; // <-- reset timer bij hervatten
+        sessionStartTimer = 0f;
 
         Debug.Log("▶️ Game resumed");
     }

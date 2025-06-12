@@ -27,19 +27,12 @@ public class GameOver : MonoBehaviour
 
     private bool gameOverTriggered = false;
 
+    public bool IsGameOver => gameOverTriggered;
+
     public void OnGameOver()
-    
     {
-        Debug.Log("🟢 Entered GameOver.OnGameOver()");
-
-        if (gameOverTriggered)
-        {
-            Debug.Log("⚠️ GameOver already triggered, skipping.");
-            return;
-        }
-
+        if (gameOverTriggered) return;
         gameOverTriggered = true;
-        Debug.Log("✅ Game Over triggered");
 
         // Stop the music
         if (sessionStartManager != null && sessionStartManager.music != null)
@@ -94,6 +87,16 @@ public class GameOver : MonoBehaviour
                 $"{stats.GetMaxSpeed():F2} km/h\n" +
                 $"{stats.totalXP:F1} XP\n" +
                 $"{xpPerSecond:F2}";
+        }
+
+        // Zet het pauzepanel uit en deactiveer PauseManager volledig
+        PauseManager pauseManager = FindObjectOfType<PauseManager>();
+        if (pauseManager != null)
+        {
+            if (pauseManager.pausePanel != null)
+                pauseManager.pausePanel.SetActive(false);
+
+            pauseManager.enabled = false; // Volledig uitschakelen
         }
     }
 
