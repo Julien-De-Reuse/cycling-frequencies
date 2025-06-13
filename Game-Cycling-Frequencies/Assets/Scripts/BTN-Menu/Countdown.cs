@@ -10,6 +10,9 @@ public class Countdown : MonoBehaviour
     [Tooltip("UI Text element dat de resterende tijd toont")]
     public TMP_Text textBox;
 
+
+    public GameOver gameOverManager; // Sleep deze in de Inspector
+
     private float remainingTime;
     private bool isCounting = false;
 
@@ -32,6 +35,10 @@ public class Countdown : MonoBehaviour
 
     void Update()
     {
+        // Stop countdown als game over is
+        if (gameOverManager != null && gameOverManager.IsGameOver)
+            return;
+
         if (!isCounting) return;
 
         if (remainingTime > 0)
@@ -40,7 +47,11 @@ public class Countdown : MonoBehaviour
             GameStatsManager.Instance.UpdateSessionTime(Time.deltaTime);
 
             if (textBox != null)
-                textBox.text = Mathf.Ceil(remainingTime).ToString();
+            {
+                int minutes = Mathf.FloorToInt(remainingTime / 60f);
+                int seconds = Mathf.FloorToInt(remainingTime % 60f);
+                textBox.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            }
         }
         else
         {

@@ -4,6 +4,7 @@ using System.IO.Ports;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class PauseManager : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class PauseManager : MonoBehaviour
 
     private float currentSpeed = 0f;
     private float speedZeroTimer = 0.05f;
-    private float pauseThreshold = 2f;
+    private float pauseThreshold = 1f;
     private float sessionStartTimer = 0f;
     private float pauseEnableDelay = 5f;
 
@@ -125,6 +126,7 @@ public class PauseManager : MonoBehaviour
             {
                 colors.normalColor = Color.green;
                 btn.image.color = Color.green;
+                EventSystem.current.SetSelectedGameObject(btn.gameObject);
             }
             else
             {

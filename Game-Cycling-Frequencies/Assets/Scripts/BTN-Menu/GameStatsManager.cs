@@ -10,6 +10,8 @@ public class GameStatsManager : MonoBehaviour
 
     private List<float> speedSamples = new List<float>();
 
+    public GameOver gameOverManager; // Sleep deze in de Inspector
+
     private void Awake()
     {
         Instance = this;
@@ -17,7 +19,9 @@ public class GameStatsManager : MonoBehaviour
 
     private void Update()
     {
-        if (!sessionActive) return; // <--- THIS IS IMPORTANT
+        // Stop XP en tijd als game over is
+        if (!sessionActive || (gameOverManager != null && gameOverManager.IsGameOver))
+            return;
 
         totalSessionTime += Time.deltaTime;
         // XP logic here

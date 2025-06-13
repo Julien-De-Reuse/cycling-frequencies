@@ -43,15 +43,25 @@ The car’s movement is based on the audio spectrum of a selected `.mp3` song.
 
 ---
 
-## ✅ To Do
 
-- [ ] Finalize in-game UI
-- [ ] Add game-over screen and logic
-- [ ] Enable level selection based on difficulty
-- [ ] Use push-buttons for UX
-- [ ] Timer
-- [ ] XP system only starts after session begins
-- [ ] Music selector in menu
+## Sources
+
+- https://www.youtube.com/watch?v=3SdMFPdSi7M
+- https://www.youtube.com/watch?v=7BAaUmypaeA&list=PL4tDW7ckeypwQDhD2qPgvHm00NCSYvb-9&index=1&pp=gAQBiAQB
+- https://www.youtube.com/watch?v=YoGnxoJR_s4&list=PL4tDW7ckeypwQDhD2qPgvHm00NCSYvb-9&index=2&pp=gAQBiAQB
+- https://www.youtube.com/watch?v=5rxMdiCkQGk&list=PL4tDW7ckeypwQDhD2qPgvHm00NCSYvb-9&index=3&pp=gAQBiAQB
+- https://www.youtube.com/watch?v=YOaYQrN1oYQ&list=PL4tDW7ckeypwQDhD2qPgvHm00NCSYvb-9&index=4&t=137s&pp=gAQBiAQB
+- https://www.youtube.com/watch?v=iIwcqgAPVWI&list=PL4tDW7ckeypwQDhD2qPgvHm00NCSYvb-9&index=5&t=250s&pp=gAQBiAQB
+- https://www.youtube.com/watch?v=ijAN0QI70UU&list=PL4tDW7ckeypwQDhD2qPgvHm00NCSYvb-9&index=6&t=263s&pp=gAQBiAQB
+- https://chatgpt.com/share/684c2d18-31ec-8003-a05b-994dc7cdbd06
+- https://chatgpt.com/share/684c29ab-e42c-8003-bba6-0b0802776759
+- https://chatgpt.com/share/684c2b90-acfc-8003-9a4e-91aad23c3123
+- https://chatgpt.com/share/684c2bed-2164-8003-b0d7-9c0414fe2225
+- https://chatgpt.com/share/684c2c0f-d3f8-8003-9f94-d8066c751399
+- https://chatgpt.com/g/g-p-68136010669c8191b0c690efebcca5ae-final-work/c/682324f6-9484-8003-8dda-abe74c47c9dc
+- https://chatgpt.com/share/684c2cc6-9fa0-8003-9a56-df4ed9555e17
+- *Asstistance with some errors and code with Github-Copilot (VSC plug-in)
+
 
 ---
 

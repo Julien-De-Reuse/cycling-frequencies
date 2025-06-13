@@ -101,7 +101,7 @@ public class ModSelectionController : MonoBehaviour
             GameObject popup = modPopups[selectedIndex];
             popup.SetActive(true);
             isPopupActive = true;
-            popupConfirmIndex = 0;
+            popupConfirmIndex = 1; // <-- Back button is selected first!
 
             // Zoek knoppen binnen de popup
             Button[] buttonsInPopup = popup.GetComponentsInChildren<Button>(true);
@@ -151,7 +151,7 @@ public class ModSelectionController : MonoBehaviour
             case "CruiseControlButton":
                 NEWGameManager.Instance.SetCurrentMod(NEWGameManager.ModType.CruiseControl);
                 break;
-                        case "pianoMod":
+            case "pianoMod":
                 NEWGameManager.Instance.SetCurrentMod(NEWGameManager.ModType.Piano);
                 break;
         }

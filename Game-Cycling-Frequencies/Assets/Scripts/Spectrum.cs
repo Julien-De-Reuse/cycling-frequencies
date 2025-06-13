@@ -7,7 +7,7 @@ public class Spectrum : MonoBehaviour
     [Header("Bewegingsinstellingen")]
     public float movementMultiplier = 20f;     // Wordt aangepast via level
     public float smoothSpeed = 10f;
-    public float minSpeed = 10f;               // Minimale snelheid
+    public float minSpeed = 6f;               // Minimale snelheid
 
     private Vector3 targetPosition;
     private bool isActive = false;
@@ -51,7 +51,7 @@ public class Spectrum : MonoBehaviour
     {
         // Pas multiplier aan op basis van gekozen difficulty
         // Voorbeeld: 20 → 50 → 80 → 110 → 140
-        movementMultiplier = 20f + ((level - 1) * 30f);
+        movementMultiplier = 10f + ((level - 1) * 30f);
 
         Debug.Log($"[Spectrum] StartDriving - Level {level}, MovementMultiplier = {movementMultiplier}");
 
