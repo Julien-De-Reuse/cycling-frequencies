@@ -14,13 +14,12 @@ The car’s movement is based on the audio spectrum of a selected `.mp3` song.
 - ⏱ Countdown before game start
 - 🧠 XP system based on distance to the car
 
-
 ## 🛠 Tech Stack
 
 - **Unity** 6.1 (6000.1.0f1)
 - **Arduino Nano** with Hall sensor and push-buttons
 - Serial communication with Unity (via COM port)
-- *(Optional but postponed)* Heart rate sensor integration
+- _(Optional but postponed)_ Heart rate sensor integration
 
 ---
 
@@ -43,7 +42,6 @@ The car’s movement is based on the audio spectrum of a selected `.mp3` song.
 
 ---
 
-
 ## Sources
 
 - https://www.youtube.com/watch?v=3SdMFPdSi7M
@@ -60,13 +58,19 @@ The car’s movement is based on the audio spectrum of a selected `.mp3` song.
 - https://chatgpt.com/share/684c2c0f-d3f8-8003-9f94-d8066c751399
 - https://chatgpt.com/g/g-p-68136010669c8191b0c690efebcca5ae-final-work/c/682324f6-9484-8003-8dda-abe74c47c9dc
 - https://chatgpt.com/share/684c2cc6-9fa0-8003-9a56-df4ed9555e17
-- *Asstistance with some errors and code with Github-Copilot (VSC plug-in)
-
+- \*Asstistance with some errors and code with Github-Copilot (VSC plug-in)
+- https://www.youtube.com/watch?v=vefFgerTgPc
 
 ---
 
-## 📸 Screenshots  
-*To be added later*
+## 📸 Screenshots
+
+![Start](Game-Cycling-Frequencies/Screenshots/start.png)
+![Mod Selection](Game-Cycling-Frequencies/Screenshots/modselection.png)
+![Envirnment Selection](Game-Cycling-Frequencies/Screenshots/evironmentselection.png)
+![Nature Scene](Game-Cycling-Frequencies/Screenshots/nature.png)
+![Space Scene](Game-Cycling-Frequencies/Screenshots/space.png)
+![Piano-City Scene](Game-Cycling-Frequencies/Screenshots/pianocity.png)
 
 ---
 

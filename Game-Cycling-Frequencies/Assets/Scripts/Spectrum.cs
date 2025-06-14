@@ -5,9 +5,9 @@ using UnityEngine;
 public class Spectrum : MonoBehaviour
 {
     [Header("Bewegingsinstellingen")]
-    public float movementMultiplier = 20f;     // Wordt aangepast via level
-    public float smoothSpeed = 10f;
-    public float minSpeed = 6f;               // Minimale snelheid
+    public float movementMultiplier = 20f;    // number based on difficulty
+    public float smoothSpeed = 0.1f;           // Smoothness of the movement, 1f = instant, 0.1f = very smooth
+    public float minSpeed = 9f;               // Minimal speed
 
     private Vector3 targetPosition;
     private bool isActive = false;
@@ -42,16 +42,10 @@ public class Spectrum : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed * Time.deltaTime);
     }
 
-    /// <summary>
-    /// Activeert beweging en past de snelheid aan volgens het difficulty level.
-    /// Deze methode wordt aangeroepen door de SceneDifficultyManager.
-    /// </summary>
-    /// <param name="level">De difficulty level (1 t.e.m. 5)</param>
     public void StartDriving(int level)
     {
-        // Pas multiplier aan op basis van gekozen difficulty
-        // Voorbeeld: 20 → 50 → 80 → 110 → 140
-        movementMultiplier = 10f + ((level - 1) * 30f);
+        // Multiplier based on choosen difficulty
+        movementMultiplier = 10f + ((level - 1) * 6f); // Example: Level 1 = 10, Level 2 = 16, Level 3 = 22, etc.
 
         Debug.Log($"[Spectrum] StartDriving - Level {level}, MovementMultiplier = {movementMultiplier}");
 

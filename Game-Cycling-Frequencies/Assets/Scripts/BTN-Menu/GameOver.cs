@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic; // Needed for List<>
+using System.IO.Ports; // Needed for SerialPort
 
 public class GameOver : MonoBehaviour
 {
@@ -24,6 +26,11 @@ public class GameOver : MonoBehaviour
 
     public TMP_Text statsLabelsText;
     public TMP_Text statsValuesText;
+
+    public List<Button> gameOverButtons; // Assign in Inspector: [Restart, Menu, Exit]
+    private int selectedButtonIndex = 0;
+
+    private SerialPort serial; // Assign in Inspector or FindObjectOfType in Start()
 
     private bool gameOverTriggered = false;
 
@@ -65,6 +72,7 @@ public class GameOver : MonoBehaviour
         {
             resultsPanel.SetActive(true);
             Debug.Log("📦 Results panel shown.");
+            UpdateButtonStyles(); // <-- Add this line
         }
 
         // Show final session stats
@@ -117,5 +125,70 @@ public class GameOver : MonoBehaviour
     {
         Debug.Log("🚪 Exiting game...");
         Application.Quit();
+    }
+
+    void Start()
+    {
+        serial = SerialManager.Instance.serial;
+        UpdateButtonStyles();
+    }
+
+    void Update()
+    {
+        if (!IsGameOver) return;
+
+        if (serial != null && serial.IsOpen)
+        {
+            try
+            {
+                string input = serial.ReadLine().Trim();
+
+                if (input == "-")
+                {
+                    selectedButtonIndex = (selectedButtonIndex - 1 + gameOverButtons.Count) % gameOverButtons.Count;
+                    UpdateButtonStyles();
+                }
+                else if (input == "+")
+                {
+                    selectedButtonIndex = (selectedButtonIndex + 1) % gameOverButtons.Count;
+                    UpdateButtonStyles();
+                }
+                else if (input == "C")
+                {
+                    gameOverButtons[selectedButtonIndex].onClick.Invoke();
+                }
+            }
+            catch (System.Exception) { }
+        }
+    }
+
+    private void UpdateButtonHighlight()
+    {
+        for (int i = 0; i < gameOverButtons.Count; i++)
+        {
+            var btn = gameOverButtons[i];
+            var colors = btn.colors;
+            if (i == selectedButtonIndex)
+            {
+                colors.normalColor = Color.green;
+                btn.image.color = Color.green;
+            }
+            else
+            {
+                colors.normalColor = Color.white;
+                btn.image.color = Color.white;
+            }
+            btn.colors = colors;
+        }
+    }
+
+    void UpdateButtonStyles()
+    {
+        for (int i = 0; i < gameOverButtons.Count; i++)
+        {
+            ColorBlock colors = gameOverButtons[i].colors;
+            colors.normalColor = (i == selectedButtonIndex) ? Color.green : Color.white;
+            gameOverButtons[i].colors = colors;
+        }
     }
 }

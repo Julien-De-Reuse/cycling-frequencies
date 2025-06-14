@@ -19,7 +19,8 @@ public class MenuController : MonoBehaviour
     [Header("Confirmation Buttons")]
     public Button yesButton;
     public Button noButton;
-    private int confirmIndex = 0; // 0 = Yes, 1 = No
+    private int confirmIndex = 1; 
+    // 1 for "No" by default, 0 for "Yes"
     private bool isConfirming = false;
 
     void Start()
@@ -124,7 +125,7 @@ public class MenuController : MonoBehaviour
     {
         Debug.Log("Showing confirmation popup for: " + menuButtons[selectedIndex].name);
         isConfirming = true;
-        confirmIndex = 0;
+        confirmIndex = 1; // 1 for "No" by default, 0 for "Yes"
         confirmPanel.SetActive(true);
         UpdateConfirmationButtonStyles();
     }
