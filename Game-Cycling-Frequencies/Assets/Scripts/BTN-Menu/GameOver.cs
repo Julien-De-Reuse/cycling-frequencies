@@ -85,16 +85,26 @@ public class GameOver : MonoBehaviour
                 "<b>Avg Speed:</b>\n" +
                 "<b>Max Speed:</b>\n" +
                 "<b>Total XP:</b>\n" +
-                "<b>XP/sec:</b>";
+                "<b>XP/sec:</b>"+
+                "<b>Session analysis :</b>";
 
             float xpPerSecond = stats.totalSessionTime > 0 ? stats.GetXPPerSecond() : 0f;
+
+            string quality;
+            if (xpPerSecond < 2f)
+                quality = "Poor, you can do better!";
+            else if (xpPerSecond <= 4f)
+                quality = "Good, keep it up!";
+            else
+                quality = "Very Good, excellent work!";
 
             statsValuesText.text =
                 $"{stats.totalSessionTime:F1} sec\n" +
                 $"{stats.GetAverageSpeed():F2} km/h\n" +
                 $"{stats.GetMaxSpeed():F2} km/h\n" +
                 $"{stats.totalXP:F1} XP\n" +
-                $"{xpPerSecond:F2}";
+                $"{xpPerSecond:F2}\n" +
+                $"{ quality}";
         }
 
         // Zet het pauzepanel uit en deactiveer PauseManager volledig

@@ -95,14 +95,48 @@ public class SessionStartManager : MonoBehaviour
 
                 case NEWGameManager.ModType.CruiseControl:
                     duration = manager.cruiseControlData.selectedSessionDuration;
-                    levelToUse = 1; // Of afleiden uit snelheid als gewenst
+                    levelToUse = 1;
                     break;
 
                 case NEWGameManager.ModType.Overdrive:
-                    // Voorlopig geen sessieduur of level logica
-                    duration = 60;
-                    levelToUse = 2;
-                    break;
+                    var progCube = FindObjectOfType<ProgCubeMover>();
+                    if (progCube != null)
+                        progCube.enabled = true;
+
+                    var overdriveTimer = FindObjectOfType<OverdriveTimer>();
+                    if (overdriveTimer != null)
+                        overdriveTimer.enabled = true;
+
+                    // Start de statistieken!
+                    GameStatsManager.Instance.StartSessionStats();
+
+                    // Zet camera aan!
+                    var cam = FindObjectOfType<CameraFollower>();
+                    if (cam != null)
+                        cam.EnableCameraFollow();
+
+                    // 🎵 Start de muziek (toevoegen!)
+                    if (music != null && manager != null)
+                    {
+                        string musicName = manager.selectedMusicName;
+
+                        if (!string.IsNullOrEmpty(musicName))
+                        {
+                            AudioClip clip = Resources.Load<AudioClip>("Music/" + musicName);
+                            if (clip != null)
+                            {
+                                music.clip = clip;
+                                music.Play();
+                                Debug.Log("🎵 Muziek gestart: " + musicName);
+                            }
+                            else
+                            {
+                                Debug.LogError("❌ AudioClip niet gevonden in Resources/Music/: " + musicName);
+                            }
+                        }
+                    }
+
+                    yield break;
             }
         }
 
@@ -134,10 +168,10 @@ public class SessionStartManager : MonoBehaviour
         }
 
         // 🎥 Zet camera aan
-        var cam = FindObjectOfType<CameraFollower>();
-        if (cam != null)
+        var cam2 = FindObjectOfType<CameraFollower>();
+        if (cam2 != null)
         {
-            cam.EnableCameraFollow();
+            cam2.EnableCameraFollow();
         }
 
         // 🕐 Start de sessie countdown
