@@ -3929,7 +3929,7 @@ MonoBehaviour:
   resultText: {fileID: 1874543819}
   sessionStartManager: {fileID: 101232763}
   car: {fileID: 2007038775}
-  carControllerScript: {fileID: 0}
+  carControllerScript: {fileID: 2007038777}
   statsLabelsText: {fileID: 487965763}
   statsValuesText: {fileID: 1874543819}
   gameOverButtons:

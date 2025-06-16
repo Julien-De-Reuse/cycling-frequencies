@@ -96,6 +96,16 @@ public class SessionStartManager : MonoBehaviour
                 case NEWGameManager.ModType.CruiseControl:
                     duration = manager.cruiseControlData.selectedSessionDuration;
                     levelToUse = 1;
+                    // Set car speed for Cruise Control
+                    float cruiseSpeed = 10f; // default
+                    float.TryParse(manager.cruiseControlData.speed, out cruiseSpeed);
+
+                    var cruiseController = FindObjectOfType<CruiseController>();
+                    if (cruiseController != null)
+                    {
+                        cruiseController.SetSpeed(cruiseSpeed);  
+                        cruiseController.StartMoving();          
+                    }
                     break;
 
                 case NEWGameManager.ModType.Overdrive:

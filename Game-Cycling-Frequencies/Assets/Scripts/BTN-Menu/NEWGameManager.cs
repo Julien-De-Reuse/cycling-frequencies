@@ -66,4 +66,15 @@ public int selectedSessionDuration; // Duur van de sessie in seconden
     {
         currentMod = selectedMod;
     }
+
+    //when the player selects a speed option
+    public void OnCruiseSpeedSelected(string speedValue)
+    {
+        NEWGameManager.Instance.cruiseControlData.speed = speedValue;
+    }
+
+    public void SetCruiseSpeed(float value)
+    {
+        NEWGameManager.Instance.cruiseControlData.speed = value.ToString();
+    }
 }

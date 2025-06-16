@@ -29,12 +29,12 @@ public class AutoSceneLoader : MonoBehaviour
 
             case NEWGameManager.ModType.CruiseControl:
                 sceneToLoad = NEWGameManager.Instance.cruiseControlData.environment;
-                sessionDurationValid = NEWGameManager.Instance.cruiseControlData.selectedSessionDuration > 0;
+                sessionDurationValid = true; // No duration required in this mod
                 break;
 
             case NEWGameManager.ModType.Overdrive:
                 sceneToLoad = NEWGameManager.Instance.overdriveData.environment;
-                sessionDurationValid = true;
+                sessionDurationValid = true; // No duration required in this mod
                 break;
         }
 
