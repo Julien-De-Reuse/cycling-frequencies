@@ -46,8 +46,8 @@ public class OverdriveTimer : MonoBehaviour
             Debug.Log($"No XP. Timer: {timeSinceLastXP:F2}");
         }
 
-        // Game over if no XP for 3 seconds
-        if (!isGameOver && timeSinceLastXP >= 3f)
+        // Game over if no XP for 2 seconds
+        if (!isGameOver && timeSinceLastXP >= 2f)
         {
             isGameOver = true;
             if (gameOverManager != null)

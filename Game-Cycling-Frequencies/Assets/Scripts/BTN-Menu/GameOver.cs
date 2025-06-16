@@ -99,12 +99,12 @@ public class GameOver : MonoBehaviour
                 quality = "Very Good, excellent work!";
 
             statsValuesText.text =
-                $"{stats.totalSessionTime:F1} sec\n" +
+                $"{(int)(stats.totalSessionTime / 60):00}:{(int)(stats.totalSessionTime % 60):00} min\n" +
                 $"{stats.GetAverageSpeed():F2} km/h\n" +
                 $"{stats.GetMaxSpeed():F2} km/h\n" +
                 $"{stats.totalXP:F1} XP\n" +
                 $"{xpPerSecond:F2}\n" +
-                $"{ quality}";
+                $"{quality}";
         }
 
         // Zet het pauzepanel uit en deactiveer PauseManager volledig

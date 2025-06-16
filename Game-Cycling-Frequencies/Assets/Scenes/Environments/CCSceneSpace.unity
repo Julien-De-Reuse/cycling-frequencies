@@ -3879,7 +3879,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "<b>Time:</b>          \n<b>Avg Speed:</b>      \n<b>Max Speed:</b>     
-    \n<b>Total XP:</b>       \n<b>XP/sec:</b>       "
+    \n<b>Total XP:</b>       \n<b>XP/sec:</b>       \n<b>Session analysis :</b>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1f88f84024c29d54287942e59fc4c6db, type: 2}
   m_sharedMaterial: {fileID: -3082023381304404484, guid: 1f88f84024c29d54287942e59fc4c6db, type: 2}
